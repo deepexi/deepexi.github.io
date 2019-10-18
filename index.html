@@ -477,6 +477,135 @@
   </article>
 
     
+        <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block home">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/10/上传-jar-到-maven-中心仓库/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="deepexi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="💧DeepEXI Team Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/09/10/上传-jar-到-maven-中心仓库/" class="post-title-link" itemprop="url">上传 jar 到 maven 中心仓库</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              
+                
+              
+
+              <time title="Created: 2019-09-10 17:09:17" itemprop="dateCreated datePublished" datetime="2019-09-10T17:09:17+08:00">2019-09-10</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-10-18 16:40:16" itemprop="dateModified" datetime="2019-10-18T16:40:16+08:00">2019-10-18</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/maven/" itemprop="url" rel="index"><span itemprop="name">maven</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="上传-jar-到-maven-中心仓库"><a href="#上传-jar-到-maven-中心仓库" class="headerlink" title="上传 jar 到 maven 中心仓库"></a>上传 jar 到 maven 中心仓库</h1><h2 id="一、前奏准备"><a href="#一、前奏准备" class="headerlink" title="一、前奏准备"></a>一、前奏准备</h2><p>了解几个 maven 相关地址：</p>
+<ul>
+<li><a href="https://issues.sonatype.org/" target="_blank" rel="noopener">工单管理地址</a>，就是申请上传资格和 groupId 的地方，没有账号的要先从这个地址里面注册账号</li>
+<li><a href="https://oss.sonatype.org/#welcome" target="_blank" rel="noopener">构建仓库</a>，把 jar 包上传到这里，Release 之后就会同步到 maven 中央仓库</li>
+<li><a href="http://search.maven.org/" target="_blank" rel="noopener">中心仓库查找地址</a>，最终表现在这里可以搜索到</li>
+</ul>
+<h2 id="二、创建工单"><a href="#二、创建工单" class="headerlink" title="二、创建工单"></a>二、创建工单</h2><p>没有账号的先去<a href="[https://issues.sonatype.org](https://issues.sonatype.org/)">工单管理地址</a>注册账号，<strong>账密要记住</strong>。</p>
+<p><img src="https://raw.githubusercontent.com/deepexi/blog/master/source/_posts/image/%E5%88%9B%E5%BB%BAissue.png" alt="创建issue"></p>
+<ul>
+<li><strong>Group Id</strong>，唯一标识，采用 com.github.xxxxx 会比较方便，也可以使用自己的网站</li>
+<li><strong>ProjectURL</strong>，填写项目地址，如果不想公开源码，填写一个只含 README 的项目的地址就可以了。</li>
+</ul>
+<p><strong><em>其实管理员主要是审核 Group Id</em></strong></p>
+<p><img src="https://raw.githubusercontent.com/deepexi/blog/master/source/_posts/image/issue%E5%AE%A1%E6%A0%B8%E7%8A%B6%E6%80%81.png" alt="创建issue"></p>
+<p>这里可以看到审核结果，第一次审核有可能会需要比较长的时间。</p>
+<h2 id="三、配置-Maven-Settings-xml-amp-pom-xml"><a href="#三、配置-Maven-Settings-xml-amp-pom-xml" class="headerlink" title="三、配置 Maven Settings.xml &amp; pom.xml"></a>三、配置 Maven Settings.xml &amp; pom.xml</h2><h3 id="1-配置-Maven-中的-conf-setting-xml"><a href="#1-配置-Maven-中的-conf-setting-xml" class="headerlink" title="1. 配置 Maven 中的 conf/setting.xml"></a>1. 配置 Maven 中的 conf/setting.xml</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">server</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 注意这里的 id 要和 pom.xml 中的 distributionManagement 中的 id 一致 --&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">id</span>&gt;</span>ossrh<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">username</span>&gt;</span>https://issues.sonatype.org的账号<span class="tag">&lt;/<span class="name">username</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">password</span>&gt;</span>https://issues.sonatype.org的密码<span class="tag">&lt;/<span class="name">password</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">server</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-配置使用项目中的-pom-xml"><a href="#2-配置使用项目中的-pom-xml" class="headerlink" title="2. 配置使用项目中的 pom.xml"></a>2. 配置使用项目中的 pom.xml</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">licenses</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">license</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>The Apache Software License, Version 2.0<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">url</span>&gt;</span>http://www.apache.org/licenses/LICENSE-2.0.txt<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">distribution</span>&gt;</span>repo<span class="tag">&lt;/<span class="name">distribution</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">license</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">licenses</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--写你自己的，这只是个例子--&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">scm</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://github.com/taccisum/shiro-starter<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">connection</span>&gt;</span>https://github.com/taccisum/shiro-starter.git<span class="tag">&lt;/<span class="name">connection</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">developerConnection</span>&gt;</span>https://github.com/taccisum<span class="tag">&lt;/<span class="name">developerConnection</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">scm</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--写你自己的，这只是个例子--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">developers</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">developer</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>taccisum<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">email</span>&gt;</span>514162920@qq.com<span class="tag">&lt;/<span class="name">email</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://taccisum.github.io<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">developer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">developers</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--写你自己的，这只是个例子--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">distributionManagement</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>ossrh<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://oss.sonatype.org/service/local/staging/deploy/maven2<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">snapshotRepository</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>ossrh<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://oss.sonatype.org/content/repositories/snapshots<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">snapshotRepository</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">distributionManagement</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="四、GPG-环境"><a href="#四、GPG-环境" class="headerlink" title="四、GPG 环境"></a>四、GPG 环境</h2><p>需要安装一个 GPG 环境，用来对上传的文件进行加密和签名，防止 jar 包被篡改。<a href="https://www.gpg4win.org/" target="_blank" rel="noopener">GPG下载地址</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看是否安装完成</span></span><br><span class="line">$ gpg -version</span><br><span class="line"><span class="comment"># 生成 gen-key</span></span><br><span class="line">$ gpg --gen-key</span><br><span class="line"><span class="comment"># 查看本地秘钥</span></span><br><span class="line">$ gpg --list-keys</span><br><span class="line">pub   rsa2048 2019-04-20 [SC] [有效至：2021-04-19]</span><br><span class="line">      [xxxxxxxxx]</span><br><span class="line">uid           [ 绝对 ] itmuch.com &lt;eacdy0000@126.com&gt;</span><br><span class="line">sub   rsa2048 2019-04-20 [E] [有效至：2021-04-19]</span><br></pre></td></tr></table></figure>
+
+<p>过程中需要填写一个密码，打包上传的时候需要用到</p>
+<h2 id="五、发布"><a href="#五、发布" class="headerlink" title="五、发布"></a>五、发布</h2><p>执行如下命令即可将依赖发布到中央仓库</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn clean install deploy -P release</span><br></pre></td></tr></table></figure>
+
+<p>不出意外，构建会报xxx服务器无法找到GPG的异常。原因是前文生成的秘钥尚未发布到key server。keyserver的地址会在异常中打印出来。我的项目报的是 <code>http://keys.gnupg.net:11371/</code> 。于是执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gpg --keyserver  http://keys.gnupg.net:11371/ --send-keys [xxxxxxxxx]</span><br><span class="line">其中的[xxxxxxxxx]，可用gpg --list-keys显示出来。</span><br></pre></td></tr></table></figure>
+
+<p>然后在执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn clean install deploy -P release</span><br></pre></td></tr></table></figure>
+
+<p>此时即可发布成功。</p>
+<p>若要修改发布的版本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn versions:<span class="built_in">set</span> -DnewVersion=1.0.2-SNAPHOST</span><br></pre></td></tr></table></figure>
+
+
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
   </div>
 
   
@@ -523,7 +652,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
