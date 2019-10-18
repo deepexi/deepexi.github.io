@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Copy',
+      copy_success: 'Copied',
+      copy_failure: 'Copy failed'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="DeepEXI 脚手架工具概念 脚手架工具：指的是用于生成脚手架的工具 脚手架：项目雏形，一般基于脚手架可以直接开始开发工作  介绍DeepEXI脚手架工具是用于微服务架构环境下，为快速开发而准备的一件利器。 基于我们的脚手架工具，您可以快速、按需地集成业界主流的框架或中间件以生成定制的脚手架，减少大量的前期项目环境的搭建时间成本。 如果您购买了我们的其它产品（如业务中台、数据中台），也可以通过脚">
+<meta name="keywords" content="deepexi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DeepEXI脚手架工具介绍">
+<meta property="og:url" content="http://yoursite.com/2019/10/15/introduction-of-deepexi-scaffold/index.html">
+<meta property="og:site_name" content="💧DeepEXI Team Blog">
+<meta property="og:description" content="DeepEXI 脚手架工具概念 脚手架工具：指的是用于生成脚手架的工具 脚手架：项目雏形，一般基于脚手架可以直接开始开发工作  介绍DeepEXI脚手架工具是用于微服务架构环境下，为快速开发而准备的一件利器。 基于我们的脚手架工具，您可以快速、按需地集成业界主流的框架或中间件以生成定制的脚手架，减少大量的前期项目环境的搭建时间成本。 如果您购买了我们的其它产品（如业务中台、数据中台），也可以通过脚">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://yoursite.com/images/scaffold_cli.jpg">
+<meta property="og:image" content="http://yoursite.com/images/scaffold_ui_index.jpg">
+<meta property="og:image" content="http://yoursite.com/images/scaffold_ui_sc.jpg">
+<meta property="og:image" content="http://yoursite.com/images/project_structure.jpg">
+<meta property="og:image" content="http://yoursite.com/images/swagger.jpg">
+<meta property="og:updated_time" content="2019-10-18T08:35:41.631Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DeepEXI脚手架工具介绍">
+<meta name="twitter:description" content="DeepEXI 脚手架工具概念 脚手架工具：指的是用于生成脚手架的工具 脚手架：项目雏形，一般基于脚手架可以直接开始开发工作  介绍DeepEXI脚手架工具是用于微服务架构环境下，为快速开发而准备的一件利器。 基于我们的脚手架工具，您可以快速、按需地集成业界主流的框架或中间件以生成定制的脚手架，减少大量的前期项目环境的搭建时间成本。 如果您购买了我们的其它产品（如业务中台、数据中台），也可以通过脚">
+<meta name="twitter:image" content="http://yoursite.com/images/scaffold_cli.jpg">
+  <link rel="canonical" href="http://yoursite.com/2019/10/15/introduction-of-deepexi-scaffold/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>DeepEXI脚手架工具介绍 | 💧DeepEXI Team Blog</title>
+  <meta name="generator" content="Hexo 3.9.0">
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">💧DeepEXI Team Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+  </ul>
+
+    
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/15/introduction-of-deepexi-scaffold/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="deepexi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="💧DeepEXI Team Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">DeepEXI脚手架工具介绍
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              
+                
+              
+
+              <time title="Created: 2019-10-15 10:03:24" itemprop="dateCreated datePublished" datetime="2019-10-15T10:03:24+08:00">2019-10-15</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-10-18 16:35:41" itemprop="dateModified" datetime="2019-10-18T16:35:41+08:00">2019-10-18</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/scaffold/" itemprop="url" rel="index"><span itemprop="name">scaffold</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="DeepEXI-脚手架工具"><a href="#DeepEXI-脚手架工具" class="headerlink" title="DeepEXI 脚手架工具"></a>DeepEXI 脚手架工具</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
+<li>脚手架工具：指的是用于生成脚手架的工具</li>
+<li>脚手架：项目雏形，一般基于脚手架可以直接开始开发工作</li>
+</ul>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>DeepEXI脚手架工具是用于微服务架构环境下，为快速开发而准备的一件利器。</p>
+<p>基于我们的脚手架工具，您可以快速、按需地集成业界主流的框架或中间件以生成定制的脚手架，减少大量的前期项目环境的搭建时间成本。</p>
+<p>如果您购买了我们的其它产品（如业务中台、数据中台），也可以通过脚手架工具快速地进行集成。</p>
+<p>我们提供了多种方式方便您使用我们的脚手架工具，例如CLI、UI或DevOps。无论是新手还是大牛，研发还是产品，相信总有一种使用方式适合您。</p>
+<p>我们的所有脚手架工具都是开源的，如果有好的需求、建议，欢迎前往各项目主页提issue或pr。</p>
+<h3 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h3><ul>
+<li><a href="https://github.com/deepexi/generator-deepexi-spring-cloud" target="_blank" rel="noopener">spring cloud</a></li>
+<li><a href="https://github.com/deepexi/generator-deepexi-dubbo" target="_blank" rel="noopener">dubbo</a></li>
+<li><a href="https://github.com/deepexi/generator-deepexi-eggjs" target="_blank" rel="noopener">eggjs</a></li>
+<li><a href="https://github.com/deepexi/deepexi-scaffold-ui" target="_blank" rel="noopener">scaffold ui</a></li>
+</ul>
+<h3 id="其它使用场景"><a href="#其它使用场景" class="headerlink" title="其它使用场景"></a>其它使用场景</h3><p>除了用于实际开发外，您还可以将脚手架用于以下场景</p>
+<h4 id="学习"><a href="#学习" class="headerlink" title="学习"></a>学习</h4><p>我们的脚手架几乎对大多数的集成项都提供了相关的使用demo及文档，通过这些内容，您可以快速的学习一些尚不熟悉的框架的使用方式，快速扩宽您的知识面。</p>
+<h4 id="实验性项目"><a href="#实验性项目" class="headerlink" title="实验性项目"></a>实验性项目</h4><p>许多时候，我们会突然想到一些好的点子，但这个点子的试验往往要创建一个新的项目来进行（担心弄乱现有项目），并且可能有许多麻烦的依赖要配置，而这个项目往往在验证完想法后就会被舍弃，为此花这么多时间来搭建实在不值得。这个时候，使用我们的脚手架工具就可以为您解决这个问题。</p>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><blockquote>
+<p>以下说明均以<a href="https://github.com/deepexi/generator-deepexi-spring-cloud" target="_blank" rel="noopener">spring cloud脚手架工具</a>为例</p>
+</blockquote>
+<h3 id="CLI"><a href="#CLI" class="headerlink" title="CLI"></a>CLI</h3><p>需要node.js环境</p>
+<pre><code><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g yo</span><br><span class="line">$ npm install -g generator-deepexi-spring-cloud</span><br><span class="line">$ mdir demo</span><br><span class="line">$ <span class="built_in">cd</span> demo</span><br><span class="line">$ yo deepexi-spring-cloud</span><br></pre></td></tr></table></figure></code></pre><p>接下来按照交互模式的指引操作，即可生成属于你的脚手架</p>
+<p><img src="/images/scaffold_cli.jpg" alt="scaffold cli"></p>
+<h3 id="UI"><a href="#UI" class="headerlink" title="UI"></a>UI</h3><h4 id="本地部署"><a href="#本地部署" class="headerlink" title="本地部署"></a>本地部署</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g yo</span><br><span class="line">$ npm install deepexi-scaffold-ui -g</span><br><span class="line">$ scaffold-ui start -p 7001 -s</span><br></pre></td></tr></table></figure>
+
+<p>等待web应用运行，访问 localhost:7001/index.html</p>
+<p>第一次访问页面时需要读取脚手架工具的相关信息，可能会比较缓慢，请耐心等候，加载过一次之后就很快了。</p>
+<p><img src="/images/scaffold_ui_index.jpg" alt="scaffold ui index"></p>
+<p><img src="/images/scaffold_ui_sc.jpg" alt="scaffold ui sc"></p>
+<h4 id="在DeepEXI-DevOps上使用"><a href="#在DeepEXI-DevOps上使用" class="headerlink" title="在DeepEXI DevOps上使用"></a>在DeepEXI DevOps上使用</h4><p>TODO:: 待补充</p>
+<h2 id="其它示例截图"><a href="#其它示例截图" class="headerlink" title="其它示例截图"></a>其它示例截图</h2><p>项目结构</p>
+<p><img src="/images/project_structure.jpg" alt="project structure"></p>
+<p>Swagger运行时文档</p>
+<p><img src="/images/swagger.jpg" alt="swagger"></p>
+
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/09/10/how-to-upload-jar-to-maven-central/" rel="next" title="上传 jar 到 maven 中心仓库">
+                  <i class="fa fa-chevron-left"></i> 上传 jar 到 maven 中心仓库
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DeepEXI-脚手架工具"><span class="nav-number">1.</span> <span class="nav-text">DeepEXI 脚手架工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">1.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.2.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#相关链接"><span class="nav-number">1.2.1.</span> <span class="nav-text">相关链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其它使用场景"><span class="nav-number">1.2.2.</span> <span class="nav-text">其它使用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#学习"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">学习</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验性项目"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">实验性项目</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何使用"><span class="nav-number">1.3.</span> <span class="nav-text">如何使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CLI"><span class="nav-number">1.3.1.</span> <span class="nav-text">CLI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UI"><span class="nav-number">1.3.2.</span> <span class="nav-text">UI</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#本地部署"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">本地部署</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在DeepEXI-DevOps上使用"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">在DeepEXI DevOps上使用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它示例截图"><span class="nav-number">1.4.</span> <span class="nav-text">其它示例截图</span></a></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">deepexi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+        </a>
+      </div>
+    
+  </nav>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">deepexi</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.4.0</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/muse.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
