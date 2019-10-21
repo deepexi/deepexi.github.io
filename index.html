@@ -225,6 +225,356 @@
   
   
   <div class="post-block home">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/21/Ansible/Ansible 快速上手/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="deepexi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="💧DeepEXI Team Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/10/21/Ansible/Ansible 快速上手/" class="post-title-link" itemprop="url">Untitled</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              
+                
+              
+
+              <time title="Created: 2019-10-21 13:09:49" itemprop="dateCreated datePublished" datetime="2019-10-21T13:09:49+08:00">2019-10-21</time>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>Ansible 系列：</p>
+<ul>
+<li>（一）：[快速上手 Ansible](./Ansible 快速上手.md)</li>
+<li>（二）：[Ansible 命令](./Ansible 命令.md)</li>
+<li>（三）：[Ansible 主机清单配置文件](Ansible 主机配置清单.md)</li>
+<li>（四）：[Ansible Playbook 剧本语法](Playbook 剧本语法.md)</li>
+</ul>
+</blockquote>
+<h2 id="快速上手-Ansible"><a href="#快速上手-Ansible" class="headerlink" title="快速上手 Ansible"></a>快速上手 Ansible</h2><p>Ansible 是  Paramiko 开发的一种自动化运维工具，基于模块化工作，集合了众多运维工具的优点，实现了批量系统配置，批量程序部署、批量运行命令等功能。</p>
+<p><strong>Ansible 它本身没有批量部署的能力，真正执行这些操作的是 Ansible 的模块，它只是提供了一种框架。直到目前为止，Ansible 已有 800 多个模块可以使用。</strong></p>
+<p><strong>Ansible 的另一个优势在于，它不需要在远程主机上安装任何东西，因为它是基于 SSH 来和远程主机进行通信的。</strong></p>
+<h3 id="安装-Ansible"><a href="#安装-Ansible" class="headerlink" title="安装 Ansible"></a>安装 Ansible</h3><p>在 Ansible 里，有两种角色 Control Machine 与 Managed Node，它们通过 SSH 和 Python 进行沟通：</p>
+<ul>
+<li><strong>Control Machine（主控端）：</strong>操作 Ansible 的机器，用于操纵 Managed Node</li>
+<li><strong>Managed Node（被控端）：</strong>被 Ansible 操纵的机器</li>
+</ul>
+<p>在一般情况下，<strong>我们只需在 Control Machine 里安装 Ansible 即可</strong>，因为 Linux 和 macOS 系统早已预载了 Python 2.5 以上的版本，且支持 SSH 连接。</p>
+<p>而使用 Ansible 来管理 Window 的话，则需要较多的设置（此处不介绍，可自寻谷歌/百度）。</p>
+<h4 id="macOS-安装-Ansible"><a href="#macOS-安装-Ansible" class="headerlink" title="macOS 安装 Ansible"></a>macOS 安装 Ansible</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 请先安装 homebrew，已安装者请略过</span></span><br><span class="line">/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"</span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装 Ansible</span></span><br><span class="line">brew install ansible</span><br></pre></td></tr></table></figure>
+
+<h4 id="Linux-安装-Ansible"><a href="#Linux-安装-Ansible" class="headerlink" title="Linux 安装 Ansible"></a>Linux 安装 Ansible</h4><p>CentOS（Yum）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 新增 epel-release 第三方套件来源。</span></span><br><span class="line">sudo yum install -y epel-release</span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装 Ansible</span></span><br><span class="line">sudo yum install -y ansible</span><br></pre></td></tr></table></figure>
+
+<p>Ubuntu（Apt）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 安装 add-apt-repository 必要套件</span></span><br><span class="line">sudo apt-get install -y python-software-properties software-properties-common</span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用 Ansible 官方的 PPA 套件来源</span></span><br><span class="line">sudo add-apt-repository -y ppa:ansible/ansible; sudo apt-get update</span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装 Ansible</span></span><br><span class="line">sudo apt-get install -y ansible</span><br></pre></td></tr></table></figure>
+
+<h4 id="使用-Pip-安装-Ansible"><a href="#使用-Pip-安装-Ansible" class="headerlink" title="使用 Pip 安装 Ansible"></a>使用 Pip 安装 Ansible</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 1、首先安装 pip</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Debian, Ubuntu</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo apt-get install -y python-pip</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> CentOS</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo yum install -y python-pip</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> macOS</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo easy_install pip</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 2、升级 pip</span></span><br><span class="line">sudo pip install -U pip</span><br><span class="line"><span class="meta">#</span><span class="bash"> 3、安装 Ansible</span></span><br><span class="line">sudo pip install ansible</span><br></pre></td></tr></table></figure>
+
+<h3 id="Ansible-文件"><a href="#Ansible-文件" class="headerlink" title="Ansible 文件"></a>Ansible 文件</h3><p>在安装 Ansible 之后，你可以访问以下 Ansible 文件：</p>
+<ul>
+<li>/usr/bin/ansible ：Ansible 命令行工具</li>
+<li>/usr/bin/ansible-doc ：Ansible 帮助文档工具</li>
+<li>/usr/bin/ansible-playbook ：Ansible 剧本执行工具</li>
+<li>/etc/ansible/ansible.cfg ：主配置文件</li>
+<li>/etc/ansible/hosts ：管理的主机清单</li>
+<li>/etc/ansible/roles ：角色存放处</li>
+</ul>
+<h3 id="Ansible-操作之-Ad-Hoc-Command-和-Playbook"><a href="#Ansible-操作之-Ad-Hoc-Command-和-Playbook" class="headerlink" title="Ansible 操作之 Ad-Hoc Command 和 Playbook"></a>Ansible 操作之 Ad-Hoc Command 和 Playbook</h3><h4 id="Ad-Hoc-Commands"><a href="#Ad-Hoc-Commands" class="headerlink" title="Ad-Hoc Commands"></a>Ad-Hoc Commands</h4><p>第一种方式是通过向 Ansible 发送 Ad-Hoc Commands（指令）来操作 Managed Node。</p>
+<p>以常见的 <code>ping</code> 和 <code>echo</code> 操作为例：</p>
+<ul>
+<li><p>ping</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ansible all -m ping</span><br><span class="line">server1 | SUCCESS =&gt; &#123;</span><br><span class="line">    "changed": false,</span><br><span class="line">    "ping": "pong"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>echo</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ansible all -m command -a "echo Hello World"</span><br><span class="line">server1 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">Hello World</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="Playbook"><a href="#Playbook" class="headerlink" title="Playbook"></a>Playbook</h4><p>另外一种方式即通过 Playbook （剧本）让各个 Managed Node 进行指定的动作（Plays）和任务（Tasks），你可以理解为 Shell Script。</p>
+<p>Playbook 支持两种写法 ：</p>
+<ul>
+<li><strong>YAML：</strong>简单易读</li>
+<li><strong>Jinja2：</strong>模板化文件，支持变量、条件、循环语法</li>
+</ul>
+<p>在一份 Playbook 中，可以有多个 Play、Task 与 Module：</p>
+<ul>
+<li><strong>Play：</strong>目的</li>
+<li><strong>Task：</strong>要执行的 Play 这个目的所需做的步骤</li>
+<li><strong>Module：</strong>Ansible 所提供的模块来执行各种操作</li>
+</ul>
+<p>下面是一个 Hello World 的 Playbook 剧本，剧本后缀名应为 .yml：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- name:</span> <span class="string">say</span> <span class="string">'hello world'</span></span><br><span class="line"><span class="attr">  hosts:</span> <span class="string">all</span></span><br><span class="line"><span class="attr">  tasks:</span></span><br><span class="line"></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">echo</span> <span class="string">'hello world'</span></span><br><span class="line"><span class="attr">      command:</span> <span class="string">echo</span> <span class="string">'hello world'</span></span><br><span class="line"><span class="attr">      register:</span> <span class="string">result</span></span><br><span class="line"></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">print</span> <span class="string">stdout</span></span><br><span class="line"><span class="attr">      debug:</span></span><br><span class="line"><span class="attr">        msg:</span> <span class="string">""</span></span><br></pre></td></tr></table></figure>
+
+<p>执行剧本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook hello_world.yml</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看-Ansible-的-Modules"><a href="#查看-Ansible-的-Modules" class="headerlink" title="查看 Ansible 的 Modules"></a>查看 Ansible 的 Modules</h3><p>模块是 Ansible 的核心，也是操作真正的执行者，只要掌握了如何使用模块就可以快速上手 Ansible，其余都只是延伸使用罢了。   </p>
+<p>例如我们经常使用的 <strong>Command Modules 模块</strong>，你可以进入 Ansible 的  <a href="http://docs.ansible.com/ansible/modules_by_category.html" target="_blank" rel="noopener">Module</a>  帮助文档中找到它的使用文档。</p>
+<p><img src="https://chusiang.gitbooks.io/automate-with-ansible/content/imgs/automate_with_ansible_basic-20.jpg" alt="automate_with_ansible_basic-20.jpg"></p>
+<p>文档中 Options 选项表会列出模块参数，参数的预设值等信息。</p>
+<p><img src="https://chusiang.gitbooks.io/automate-with-ansible/content/imgs/automate_with_ansible_basic-22.jpg" alt="automate_with_ansible_basic-22.jpg"></p>
+<h3 id="Setup-模块"><a href="#Setup-模块" class="headerlink" title="Setup 模块"></a>Setup 模块</h3><p>在使用 Playbook 时，Ansible 会自动执行 <a href="http://docs.ansible.com/ansible/setup_module.html" target="_blank" rel="noopener">Setup Modules</a> 以收集各个 Managed Node 的 <strong>facts（系统信息）</strong>，如 IP、作业系统、CPU 信息等。</p>
+<p>我们也可以通过 Ad-Hoc Commands 指令模式使用 setup，例如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ansible all -m setup | less</span><br><span class="line"></span><br><span class="line">--- 结果如下</span><br><span class="line">server1 | SUCCESS =&gt; &#123;</span><br><span class="line">   "ansible_facts": &#123;</span><br><span class="line">       "ansible_all_ipv4_addresses": [</span><br><span class="line">           "172.19.0.2"</span><br><span class="line">       ],</span><br><span class="line">       "ansible_all_ipv6_addresses": [</span><br><span class="line">           "fe80::42:acff:fe13:2"</span><br><span class="line">       ],</span><br><span class="line">       "ansible_architecture": "x86_64",</span><br><span class="line">       "ansible_bios_date": "03/14/2014",</span><br><span class="line">:</span><br></pre></td></tr></table></figure>
+
+<p>通过 <code>filter</code> 参数还可以过滤结果</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ansible all -m setup -a "filter=ansible_distribution*"</span><br><span class="line"></span><br><span class="line">--- 结果如下</span><br><span class="line">server1 | SUCCESS =&gt; &#123;</span><br><span class="line">   "ansible_facts": &#123;</span><br><span class="line">       "ansible_distribution": "Ubuntu",</span><br><span class="line">       "ansible_distribution_major_version": "14",</span><br><span class="line">       "ansible_distribution_release": "trusty",</span><br><span class="line">       "ansible_distribution_version": "14.04"</span><br><span class="line">   &#125;,</span><br><span class="line">   "changed": false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通常在 Playbook 中我们会将主机信息结合条件判断 <code>when</code> 使用，例如下面针对  Debian, Ubuntu, CentOS 安装 Vim 的 playbook：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">- name: Setup the vim </span><br><span class="line"> hosts: all</span><br><span class="line"> become: true</span><br><span class="line"> tasks:</span><br><span class="line"></span><br><span class="line"><span class="meta">   #</span><span class="bash"> Debian, Ubuntu.</span></span><br><span class="line">   - name: install apt packages</span><br><span class="line">     apt: name=vim state=present</span><br><span class="line">     when: ansible_pkg_mgr == "apt"</span><br><span class="line"></span><br><span class="line"><span class="meta">   #</span><span class="bash"> CentOS.</span></span><br><span class="line">   - name: install yum packages</span><br><span class="line">     yum: name=vim-minimal state=present</span><br><span class="line">     when: ansible_pkg_mgr == "yum"</span><br></pre></td></tr></table></figure>
+
+
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+        <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block home">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/21/Ansible/Ansible 命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="deepexi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="💧DeepEXI Team Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/10/21/Ansible/Ansible 命令/" class="post-title-link" itemprop="url">Untitled</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              
+                
+              
+
+              <time title="Created: 2019-10-21 13:09:49" itemprop="dateCreated datePublished" datetime="2019-10-21T13:09:49+08:00">2019-10-21</time>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>Ansible 系列：</p>
+<ul>
+<li>（一）：[快速上手 Ansible](./Ansible 快速上手.md)</li>
+<li>（二）：[Ansible 命令](./Ansible 命令.md)</li>
+<li>（三）：[Ansible 主机清单配置文件](./Ansible 主机配置清单.md)</li>
+<li>（四）：[Ansible Playbook 剧本语法](./Playbook 剧本语法.md)</li>
+</ul>
+</blockquote>
+<h2 id="Ansible-命令"><a href="#Ansible-命令" class="headerlink" title="Ansible 命令"></a>Ansible 命令</h2><h3 id="ansible"><a href="#ansible" class="headerlink" title="ansible"></a>ansible</h3><p>Ad-Hoc 即单条命令，指需要快速执行并且不需要保存的命令。默认不指定模块时，使用的是 Command 模块。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">Usage: ansible &lt;host-pattern&gt; [options]</span><br><span class="line"></span><br><span class="line">命令选项</span><br><span class="line">-a # 模块的参数。</span><br><span class="line">-B # 异步运行时，多长时间超时。</span><br><span class="line">-P # 如果使用-B，则设置轮询间隔。</span><br><span class="line">-C # 只是测试一下会改变什么内容，不会真正去执行;相反,试图预测一些可能发生的变化。</span><br><span class="line">-D # 当更改文件和模板时，显示这些文件得差异，比--check效果好。</span><br><span class="line">-f # 指定定要使用的并行进程数，默认为5个。</span><br><span class="line">-i # 指定主机清单文件或逗号分隔的主机，默认为/etc/ansible/hosts。</span><br><span class="line">-l # 进一步限制所选主机/组模式，只执行-l 后的主机和组。 也可以这样使用 -l @retry_hosts.txt</span><br><span class="line">-m 　　# 要执行的模块，默认为command。</span><br><span class="line">-M 　　# 要执行的模块的路径。</span><br><span class="line">-o 　　# 压缩输出，摘要输出.尝试一切都在一行上输出。</span><br><span class="line">-v, --verbose # 输出执行的详细信息，使用-vvv获得更多，-vvvv 启用连接调试</span><br><span class="line">--version # 显示程序版本号</span><br><span class="line">-e --extra-vars=EXTRA_VARS # 添加附加变量，比如key=value，yaml，json格式。</span><br><span class="line">--list-hosts # 输出将要操作的主机列表，不会执行操作</span><br><span class="line">--output=OUTPUT_FILE # 加密或解密输出文件名 用于标准输出。</span><br><span class="line">--tree=TREE # 将日志内容保存在该目录中,文件名以执行主机名命名。</span><br><span class="line">--syntax-check # 对playbook进行语法检查，且不执行playbook。</span><br><span class="line">--ask-vault-pass # vault 密码。</span><br><span class="line">--vault-password-file=VAULT_PASSWORD_FILE vault密码文件</span><br><span class="line">--new-vault-password-file=NEW_VAULT_PASSWORD_FILE 新vault密钥文件。</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">连接选项:</span><br><span class="line">-k --ask-pass # 要求用户输入请求连接密码</span><br><span class="line">-u --user=REMOTE_USER # 连接远程用户</span><br><span class="line">-c --connection=CONNECTION # 连接类型，默认smart，支持local ssh 和 paramiko</span><br><span class="line">-T --timeout=TIMEOUT # 指定默认超时时间，默认是10S</span><br><span class="line">--ssh-common-args=SSH_COMMON_ARGS # 指定要传递给sftp / scp / ssh的常见参数 （例如 ProxyCommand）</span><br><span class="line">--sftp-extra-args=SFTP_EXTRA_ARGS # 指定要传递给sftp，例如-f -l</span><br><span class="line">--scp-extra-args=SCP_EXTRA_ARGS # 指定要传递给scp，例如 -l</span><br><span class="line">--ssh-extra-args=SSH_EXTRA_ARGS # 指定要传递给ssh，例如 -R</span><br><span class="line">--private-key=PRIVATE_KEY_FILE, --key-file=PRIVATE_KEY_FILE 私钥路径，使用这个文件来验证连接</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">特权升级选项：</span><br><span class="line">-s --sudo # 使用sudo (nopasswd)运行操作， 不推荐使用</span><br><span class="line">-U --sudo-user=SUDO_USER # sudo 用户，默认为root， 不推荐使用</span><br><span class="line">-S --su # 使用su运行操作 不推荐使用</span><br><span class="line">-R --su-user=SU_USER # su 用户，默认为root，不推荐使用</span><br><span class="line">-b --become # 运行操作</span><br><span class="line">--become-method=BECOME_METHOD # 权限升级方法使用 ，默认为sudo，有效选择：sudo,su,pbrun,pfexec,runas,doas,dzdo</span><br><span class="line">--become-user=BECOME_USER # 使用哪个用户运行，默认为root</span><br><span class="line">--ask-sudo-pass # sudo密码，不推荐使用</span><br><span class="line">--ask-su-pass # su密码，不推荐使用</span><br><span class="line">-K --ask-become-pass # 权限提升密码</span><br></pre></td></tr></table></figure>
+
+<h3 id="ansible-doc"><a href="#ansible-doc" class="headerlink" title="ansible-doc"></a>ansible-doc</h3><p>用于查看模块信息。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Usage: ansible &lt;host-pattern&gt; [options]</span><br><span class="line"></span><br><span class="line">选项</span><br><span class="line">-h --help # 显示此帮助信息</span><br><span class="line">-l --list # 列出可用的模块</span><br><span class="line">-s --snippet # 显示playbook制定模块的用法</span><br><span class="line">-v --verbose # 详细模式（-vvv表示更多，-vvvv表示启用连接调试）</span><br><span class="line">--version # 显示程序版本号</span><br><span class="line">-M --module-path=MODULE_PATH # 指定模块库的路径</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">示例：</span><br><span class="line">ansible-doc -l</span><br><span class="line">ansible-doc shell</span><br><span class="line">ansible-doc -s shell</span><br></pre></td></tr></table></figure>
+
+<h3 id="ansible-playbook"><a href="#ansible-playbook" class="headerlink" title="ansible-playbook"></a>ansible-playbook</h3><p>对于需反复执行的、较为复杂的任务，我们可以通过定义 Playbook 来搞定。它允许使用变量、条件、循环、以及模板，也能通过角色及包含指令来重用既有内容。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Usage: ansible-playbook playbook.yml</span><br><span class="line"></span><br><span class="line">相对于ansible，增加了下列选项：</span><br><span class="line">--flush-cache # 清除fact缓存</span><br><span class="line">--syntax-check # 语法检查</span><br><span class="line">--force-handlers # 如果任务失败，也要运行handlers</span><br><span class="line">--list-tags # 列出所有可用的标签</span><br><span class="line">--list-tasks # 列出将要执行的所有任务</span><br><span class="line">--skip-tags=SKIP_TAGS # 跳过运行标记此标签的任务</span><br><span class="line">--start-at-task=START_AT_TASK # 在此任务处开始运行</span><br><span class="line">--step 一步一步：在运行之前确认每个任务</span><br><span class="line">-t TAGS, --tags=TAGS 只运行标记此标签的任务</span><br></pre></td></tr></table></figure>
+
+
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+        <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block home">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/21/Ansible/Ansible 主机配置清单/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="deepexi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="💧DeepEXI Team Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/10/21/Ansible/Ansible 主机配置清单/" class="post-title-link" itemprop="url">Untitled</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              
+                
+              
+
+              <time title="Created: 2019-10-21 13:09:49" itemprop="dateCreated datePublished" datetime="2019-10-21T13:09:49+08:00">2019-10-21</time>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>Ansible 系列：</p>
+<ul>
+<li>（一）：[快速上手 Ansible](./Ansible 快速上手.md)</li>
+<li>（二）：[Ansible 命令](./Ansible 命令.md)</li>
+<li>（三）：[Ansible 主机清单配置文件](./Ansible 主机配置清单.md)</li>
+<li>（四）：[Ansible Playbook 剧本语法](./Playbook 剧本语法.md)</li>
+</ul>
+</blockquote>
+<h2 id="Ansible-主机配置清单文件"><a href="#Ansible-主机配置清单文件" class="headerlink" title="Ansible 主机配置清单文件"></a>Ansible 主机配置清单文件</h2><blockquote>
+<p>参考至<a href="https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#" target="_blank" rel="noopener">官方文档</a>，官方文档包含了清单文件的 YAML 写法</p>
+</blockquote>
+<p><strong>在通过 Ansible 操作目标主机之前，你需要先在 Inventory（主机清单）中配置目标主机信息。</strong></p>
+<p>默认情况下主机清单保存在系统的 <code>/etc/ansible/hosts</code> 文件中，你也可以通过命令行选项指定其它的清单文件 <strong>-i &lt;path&gt;</strong>。</p>
+<p>主机清单配置默认格式为 INI，下面是一个主机清单配置例子：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[web]</span> </span><br><span class="line">www.abc.com1</span><br><span class="line">192.168.0.2</span><br></pre></td></tr></table></figure>
+
+<p>上述配置中方括号为组名，<a href="http://www.abc.com1" target="_blank" rel="noopener">www.abc.com1</a> 和 192.168.0.2 为被监控主机的域名或 IP。也可以是主机名，但此时需要指定主机 IP 环境变量 。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[web]</span> </span><br><span class="line">node ansible_host=192.0.2.50</span><br></pre></td></tr></table></figure>
+
+<p>默认采用密钥认证，如果没有密钥认证，那么你需要配置主机密码环境变量。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[web]</span> </span><br><span class="line">www.abc.com1 ansible_user=root ansible_password=123456</span><br></pre></td></tr></table></figure>
+
+<p>你也可以对指定组下的主机进行统一的环境变量配置：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[web]</span> </span><br><span class="line">www.abc.com1 ansible_user=root ansible_password=123456 http_port=8080</span><br><span class="line">192.168.0.2 ansible_user=root ansible_password=123451</span><br><span class="line"></span><br><span class="line"><span class="section">[web:vars]</span></span><br><span class="line"><span class="attr">http_port</span>=<span class="number">80</span></span><br><span class="line"><span class="attr">ssh_port</span>=<span class="number">22</span></span><br><span class="line"><span class="attr">redis_port</span>=<span class="number">6379</span></span><br></pre></td></tr></table></figure>
+
+<p>如果主机名或 IP 是有序有规则的，你还可以采用数字或字符范围格式，而不是列出每个主机名：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[webservers]</span></span><br><span class="line">www[01:50].example.com</span><br><span class="line"></span><br><span class="line"><span class="section">[databases]</span></span><br><span class="line">db-[a:f].example.com</span><br></pre></td></tr></table></figure>
+
+<h3 id="组的继承"><a href="#组的继承" class="headerlink" title="组的继承"></a>组的继承</h3><p>组还支持继承（嵌套），其格式为 <strong>组名+”:children”</strong> 组成，如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[shenzhen]</span></span><br><span class="line">host1</span><br><span class="line">host2</span><br><span class="line"><span class="section">[guangzhou]</span></span><br><span class="line">host3</span><br><span class="line">host4</span><br><span class="line"><span class="section">[guangdong:children]</span></span><br><span class="line">shenzhen</span><br><span class="line">guangzhou</span><br><span class="line"><span class="section">[guangdong:vars]</span></span><br><span class="line"><span class="attr">tomcat</span>=<span class="number">192.168</span>.<span class="number">8.8</span></span><br><span class="line"><span class="attr">nginx</span>=<span class="number">192.168</span>.<span class="number">8.66</span></span><br><span class="line"><span class="attr">apache</span>=<span class="number">192.168</span>.<span class="number">8.77</span></span><br><span class="line"><span class="attr">zabbix</span>=<span class="number">192.168</span>.<span class="number">8.88</span></span><br><span class="line"><span class="section">[china:children]</span></span><br><span class="line">guangdong</span><br><span class="line">beijing</span><br><span class="line">shanghai</span><br></pre></td></tr></table></figure>
+
+<p>上面我指定了深圳组有 host1、host2，广州组有host3、host4。广东组包含深圳和广州，同时为该组内的所有主机指定了四个环境变量。后又设定了一个中国组，包含广东、北京、上海。</p>
+<h3 id="默认组"><a href="#默认组" class="headerlink" title="默认组"></a>默认组</h3><p>所有主机都属于两个隐式的组：</p>
+<ul>
+<li><strong>all：</strong>包含每个主机</li>
+<li><strong>ungrouped：</strong>除了 all 组之外没有其它组的主机</li>
+</ul>
+<h3 id="组织环境变量"><a href="#组织环境变量" class="headerlink" title="组织环境变量"></a>组织环境变量</h3><p>环境变量除了写在主机清单文件中，还可以单独存储在单个文件中。</p>
+<p>我们可以在主机清单文件的同级目录中创建两个目录 “group_vars” 和 “host_vars”，分别存储组变量与主机变量文件。</p>
+<p>如我们在主机清单文件中声明了组 test，此时在 group_vars 目录下创建一个名为 test 的文件（该文件为 YAML 格式），其内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tomcat: 192.168.8.8</span><br></pre></td></tr></table></figure>
+
+<p>此时 test 组中的主机将会包含 tomcat 这个环境变量。</p>
+<p>当 “group_vars” 或 “host_vars” 外部环境变量文件与主机清单文件中的环境变量冲突时，前者优先级更高。</p>
+<h3 id="特殊环境变量"><a href="#特殊环境变量" class="headerlink" title="特殊环境变量"></a>特殊环境变量</h3><p>Ansible 定义了一些固定的环境变量名，这些环境变量将会影响 Ansible 的行为。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ansible_connection #主机连接类型，这可以是任何 ansible 连接插件的名称，如 smart、ssh、paramiko、local</span><br><span class="line">ansible_ssh_host # 将要连接的远程主机名.与你想要设定的主机的别名不同的话,可通过此变量设置.</span><br><span class="line">ansible_ssh_port # 连接端口号（默认22）</span><br><span class="line">ansible_ssh_user # 连接主机时的用户名</span><br><span class="line">ansible_ssh_pass # 用于验证主机的密码</span><br><span class="line">ansible_ssh_private_key_file # ssh 使用的私钥文件.适用于有多个密钥,而你不想使用 SSH 代理的情况.</span><br><span class="line">ansible_ssh_common_args # 此设置附加到 sftp，scp 和 ssh 的缺省命令行</span><br><span class="line">ansible_sftp_extra_args # 此设置附加到默认 sftp 命令行</span><br><span class="line">ansible_scp_extra_args # 此设置附加到默认 scp 命令行</span><br><span class="line">ansible_ssh_extra_args # 此设置附加到默认 ssh 命令行</span><br><span class="line">ansible_ssh_pipelining # 确定是否使用 SSH 管道。 这可以覆盖 ansible.cfg 中得设置</span><br><span class="line">ansible_shell_type # 目标系统的 shell 类型，默认情况下命令的执行使用 'sh' 语法,可设置为 'csh' 或 'fish'</span><br><span class="line">ansible_python_interpreter # 目标主机的 python 路径，适用于的情况: 系统中有多个 Python, 或者命令路径不是"/usr/bin/python",比如 *BSD, 或者 /usr/bin/python</span><br><span class="line">ansible_interpreter # 这里的""可以是 ruby、perl 或其他语言的解释器，作用和ansible_python_interpreter 类似</span><br><span class="line">ansible_shell_executable # 这将设置 ansible 控制器将在目标机器上使用的 shell，覆盖 ansible.cfg 中的配置，默认为 /bin/sh</span><br></pre></td></tr></table></figure>
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+        <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block home">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/15/introduction-of-deepexi-scaffold/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -523,7 +873,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

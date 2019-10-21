@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Copy',
+      copy_success: 'Copied',
+      copy_failure: 'Copy failed'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Ansible 系列：  （一）：[快速上手 Ansible](./Ansible 快速上手.md) （二）：[Ansible 命令](./Ansible 命令.md) （三）：[Ansible 主机清单配置文件](Ansible 主机配置清单.md) （四）：[Ansible Playbook 剧本语法](Playbook 剧本语法.md)   快速上手 AnsibleAnsible 是  P">
+<meta name="keywords" content="deepexi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="💧DeepEXI Team Blog">
+<meta property="og:url" content="http://yoursite.com/2019/10/21/Ansible/Ansible 快速上手/index.html">
+<meta property="og:site_name" content="💧DeepEXI Team Blog">
+<meta property="og:description" content="Ansible 系列：  （一）：[快速上手 Ansible](./Ansible 快速上手.md) （二）：[Ansible 命令](./Ansible 命令.md) （三）：[Ansible 主机清单配置文件](Ansible 主机配置清单.md) （四）：[Ansible Playbook 剧本语法](Playbook 剧本语法.md)   快速上手 AnsibleAnsible 是  P">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://chusiang.gitbooks.io/automate-with-ansible/content/imgs/automate_with_ansible_basic-20.jpg">
+<meta property="og:image" content="https://chusiang.gitbooks.io/automate-with-ansible/content/imgs/automate_with_ansible_basic-22.jpg">
+<meta property="og:updated_time" content="2019-10-21T05:09:49.537Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="💧DeepEXI Team Blog">
+<meta name="twitter:description" content="Ansible 系列：  （一）：[快速上手 Ansible](./Ansible 快速上手.md) （二）：[Ansible 命令](./Ansible 命令.md) （三）：[Ansible 主机清单配置文件](Ansible 主机配置清单.md) （四）：[Ansible Playbook 剧本语法](Playbook 剧本语法.md)   快速上手 AnsibleAnsible 是  P">
+<meta name="twitter:image" content="https://chusiang.gitbooks.io/automate-with-ansible/content/imgs/automate_with_ansible_basic-20.jpg">
+  <link rel="canonical" href="http://yoursite.com/2019/10/21/Ansible/Ansible 快速上手/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title> | 💧DeepEXI Team Blog</title>
+  <meta name="generator" content="Hexo 3.9.0">
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">💧DeepEXI Team Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+  </ul>
+
+    
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/21/Ansible/Ansible 快速上手/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="deepexi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="💧DeepEXI Team Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              
+                
+              
+
+              <time title="Created: 2019-10-21 13:09:49" itemprop="dateCreated datePublished" datetime="2019-10-21T13:09:49+08:00">2019-10-21</time>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>Ansible 系列：</p>
+<ul>
+<li>（一）：[快速上手 Ansible](./Ansible 快速上手.md)</li>
+<li>（二）：[Ansible 命令](./Ansible 命令.md)</li>
+<li>（三）：[Ansible 主机清单配置文件](Ansible 主机配置清单.md)</li>
+<li>（四）：[Ansible Playbook 剧本语法](Playbook 剧本语法.md)</li>
+</ul>
+</blockquote>
+<h2 id="快速上手-Ansible"><a href="#快速上手-Ansible" class="headerlink" title="快速上手 Ansible"></a>快速上手 Ansible</h2><p>Ansible 是  Paramiko 开发的一种自动化运维工具，基于模块化工作，集合了众多运维工具的优点，实现了批量系统配置，批量程序部署、批量运行命令等功能。</p>
+<p><strong>Ansible 它本身没有批量部署的能力，真正执行这些操作的是 Ansible 的模块，它只是提供了一种框架。直到目前为止，Ansible 已有 800 多个模块可以使用。</strong></p>
+<p><strong>Ansible 的另一个优势在于，它不需要在远程主机上安装任何东西，因为它是基于 SSH 来和远程主机进行通信的。</strong></p>
+<h3 id="安装-Ansible"><a href="#安装-Ansible" class="headerlink" title="安装 Ansible"></a>安装 Ansible</h3><p>在 Ansible 里，有两种角色 Control Machine 与 Managed Node，它们通过 SSH 和 Python 进行沟通：</p>
+<ul>
+<li><strong>Control Machine（主控端）：</strong>操作 Ansible 的机器，用于操纵 Managed Node</li>
+<li><strong>Managed Node（被控端）：</strong>被 Ansible 操纵的机器</li>
+</ul>
+<p>在一般情况下，<strong>我们只需在 Control Machine 里安装 Ansible 即可</strong>，因为 Linux 和 macOS 系统早已预载了 Python 2.5 以上的版本，且支持 SSH 连接。</p>
+<p>而使用 Ansible 来管理 Window 的话，则需要较多的设置（此处不介绍，可自寻谷歌/百度）。</p>
+<h4 id="macOS-安装-Ansible"><a href="#macOS-安装-Ansible" class="headerlink" title="macOS 安装 Ansible"></a>macOS 安装 Ansible</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 请先安装 homebrew，已安装者请略过</span></span><br><span class="line">/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"</span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装 Ansible</span></span><br><span class="line">brew install ansible</span><br></pre></td></tr></table></figure>
+
+<h4 id="Linux-安装-Ansible"><a href="#Linux-安装-Ansible" class="headerlink" title="Linux 安装 Ansible"></a>Linux 安装 Ansible</h4><p>CentOS（Yum）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 新增 epel-release 第三方套件来源。</span></span><br><span class="line">sudo yum install -y epel-release</span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装 Ansible</span></span><br><span class="line">sudo yum install -y ansible</span><br></pre></td></tr></table></figure>
+
+<p>Ubuntu（Apt）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 安装 add-apt-repository 必要套件</span></span><br><span class="line">sudo apt-get install -y python-software-properties software-properties-common</span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用 Ansible 官方的 PPA 套件来源</span></span><br><span class="line">sudo add-apt-repository -y ppa:ansible/ansible; sudo apt-get update</span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装 Ansible</span></span><br><span class="line">sudo apt-get install -y ansible</span><br></pre></td></tr></table></figure>
+
+<h4 id="使用-Pip-安装-Ansible"><a href="#使用-Pip-安装-Ansible" class="headerlink" title="使用 Pip 安装 Ansible"></a>使用 Pip 安装 Ansible</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 1、首先安装 pip</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Debian, Ubuntu</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo apt-get install -y python-pip</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> CentOS</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo yum install -y python-pip</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> macOS</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo easy_install pip</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 2、升级 pip</span></span><br><span class="line">sudo pip install -U pip</span><br><span class="line"><span class="meta">#</span><span class="bash"> 3、安装 Ansible</span></span><br><span class="line">sudo pip install ansible</span><br></pre></td></tr></table></figure>
+
+<h3 id="Ansible-文件"><a href="#Ansible-文件" class="headerlink" title="Ansible 文件"></a>Ansible 文件</h3><p>在安装 Ansible 之后，你可以访问以下 Ansible 文件：</p>
+<ul>
+<li>/usr/bin/ansible ：Ansible 命令行工具</li>
+<li>/usr/bin/ansible-doc ：Ansible 帮助文档工具</li>
+<li>/usr/bin/ansible-playbook ：Ansible 剧本执行工具</li>
+<li>/etc/ansible/ansible.cfg ：主配置文件</li>
+<li>/etc/ansible/hosts ：管理的主机清单</li>
+<li>/etc/ansible/roles ：角色存放处</li>
+</ul>
+<h3 id="Ansible-操作之-Ad-Hoc-Command-和-Playbook"><a href="#Ansible-操作之-Ad-Hoc-Command-和-Playbook" class="headerlink" title="Ansible 操作之 Ad-Hoc Command 和 Playbook"></a>Ansible 操作之 Ad-Hoc Command 和 Playbook</h3><h4 id="Ad-Hoc-Commands"><a href="#Ad-Hoc-Commands" class="headerlink" title="Ad-Hoc Commands"></a>Ad-Hoc Commands</h4><p>第一种方式是通过向 Ansible 发送 Ad-Hoc Commands（指令）来操作 Managed Node。</p>
+<p>以常见的 <code>ping</code> 和 <code>echo</code> 操作为例：</p>
+<ul>
+<li><p>ping</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ansible all -m ping</span><br><span class="line">server1 | SUCCESS =&gt; &#123;</span><br><span class="line">    "changed": false,</span><br><span class="line">    "ping": "pong"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>echo</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ansible all -m command -a "echo Hello World"</span><br><span class="line">server1 | SUCCESS | rc=0 &gt;&gt;</span><br><span class="line">Hello World</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="Playbook"><a href="#Playbook" class="headerlink" title="Playbook"></a>Playbook</h4><p>另外一种方式即通过 Playbook （剧本）让各个 Managed Node 进行指定的动作（Plays）和任务（Tasks），你可以理解为 Shell Script。</p>
+<p>Playbook 支持两种写法 ：</p>
+<ul>
+<li><strong>YAML：</strong>简单易读</li>
+<li><strong>Jinja2：</strong>模板化文件，支持变量、条件、循环语法</li>
+</ul>
+<p>在一份 Playbook 中，可以有多个 Play、Task 与 Module：</p>
+<ul>
+<li><strong>Play：</strong>目的</li>
+<li><strong>Task：</strong>要执行的 Play 这个目的所需做的步骤</li>
+<li><strong>Module：</strong>Ansible 所提供的模块来执行各种操作</li>
+</ul>
+<p>下面是一个 Hello World 的 Playbook 剧本，剧本后缀名应为 .yml：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- name:</span> <span class="string">say</span> <span class="string">'hello world'</span></span><br><span class="line"><span class="attr">  hosts:</span> <span class="string">all</span></span><br><span class="line"><span class="attr">  tasks:</span></span><br><span class="line"></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">echo</span> <span class="string">'hello world'</span></span><br><span class="line"><span class="attr">      command:</span> <span class="string">echo</span> <span class="string">'hello world'</span></span><br><span class="line"><span class="attr">      register:</span> <span class="string">result</span></span><br><span class="line"></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">print</span> <span class="string">stdout</span></span><br><span class="line"><span class="attr">      debug:</span></span><br><span class="line"><span class="attr">        msg:</span> <span class="string">""</span></span><br></pre></td></tr></table></figure>
+
+<p>执行剧本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook hello_world.yml</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看-Ansible-的-Modules"><a href="#查看-Ansible-的-Modules" class="headerlink" title="查看 Ansible 的 Modules"></a>查看 Ansible 的 Modules</h3><p>模块是 Ansible 的核心，也是操作真正的执行者，只要掌握了如何使用模块就可以快速上手 Ansible，其余都只是延伸使用罢了。   </p>
+<p>例如我们经常使用的 <strong>Command Modules 模块</strong>，你可以进入 Ansible 的  <a href="http://docs.ansible.com/ansible/modules_by_category.html" target="_blank" rel="noopener">Module</a>  帮助文档中找到它的使用文档。</p>
+<p><img src="https://chusiang.gitbooks.io/automate-with-ansible/content/imgs/automate_with_ansible_basic-20.jpg" alt="automate_with_ansible_basic-20.jpg"></p>
+<p>文档中 Options 选项表会列出模块参数，参数的预设值等信息。</p>
+<p><img src="https://chusiang.gitbooks.io/automate-with-ansible/content/imgs/automate_with_ansible_basic-22.jpg" alt="automate_with_ansible_basic-22.jpg"></p>
+<h3 id="Setup-模块"><a href="#Setup-模块" class="headerlink" title="Setup 模块"></a>Setup 模块</h3><p>在使用 Playbook 时，Ansible 会自动执行 <a href="http://docs.ansible.com/ansible/setup_module.html" target="_blank" rel="noopener">Setup Modules</a> 以收集各个 Managed Node 的 <strong>facts（系统信息）</strong>，如 IP、作业系统、CPU 信息等。</p>
+<p>我们也可以通过 Ad-Hoc Commands 指令模式使用 setup，例如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ansible all -m setup | less</span><br><span class="line"></span><br><span class="line">--- 结果如下</span><br><span class="line">server1 | SUCCESS =&gt; &#123;</span><br><span class="line">   "ansible_facts": &#123;</span><br><span class="line">       "ansible_all_ipv4_addresses": [</span><br><span class="line">           "172.19.0.2"</span><br><span class="line">       ],</span><br><span class="line">       "ansible_all_ipv6_addresses": [</span><br><span class="line">           "fe80::42:acff:fe13:2"</span><br><span class="line">       ],</span><br><span class="line">       "ansible_architecture": "x86_64",</span><br><span class="line">       "ansible_bios_date": "03/14/2014",</span><br><span class="line">:</span><br></pre></td></tr></table></figure>
+
+<p>通过 <code>filter</code> 参数还可以过滤结果</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ansible all -m setup -a "filter=ansible_distribution*"</span><br><span class="line"></span><br><span class="line">--- 结果如下</span><br><span class="line">server1 | SUCCESS =&gt; &#123;</span><br><span class="line">   "ansible_facts": &#123;</span><br><span class="line">       "ansible_distribution": "Ubuntu",</span><br><span class="line">       "ansible_distribution_major_version": "14",</span><br><span class="line">       "ansible_distribution_release": "trusty",</span><br><span class="line">       "ansible_distribution_version": "14.04"</span><br><span class="line">   &#125;,</span><br><span class="line">   "changed": false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通常在 Playbook 中我们会将主机信息结合条件判断 <code>when</code> 使用，例如下面针对  Debian, Ubuntu, CentOS 安装 Vim 的 playbook：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">- name: Setup the vim </span><br><span class="line"> hosts: all</span><br><span class="line"> become: true</span><br><span class="line"> tasks:</span><br><span class="line"></span><br><span class="line"><span class="meta">   #</span><span class="bash"> Debian, Ubuntu.</span></span><br><span class="line">   - name: install apt packages</span><br><span class="line">     apt: name=vim state=present</span><br><span class="line">     when: ansible_pkg_mgr == "apt"</span><br><span class="line"></span><br><span class="line"><span class="meta">   #</span><span class="bash"> CentOS.</span></span><br><span class="line">   - name: install yum packages</span><br><span class="line">     yum: name=vim-minimal state=present</span><br><span class="line">     when: ansible_pkg_mgr == "yum"</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/10/21/Ansible/Ansible 命令/" rel="next" title="">
+                  <i class="fa fa-chevron-left"></i> 
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#快速上手-Ansible"><span class="nav-number">1.</span> <span class="nav-text">快速上手 Ansible</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-Ansible"><span class="nav-number">1.1.</span> <span class="nav-text">安装 Ansible</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#macOS-安装-Ansible"><span class="nav-number">1.1.1.</span> <span class="nav-text">macOS 安装 Ansible</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux-安装-Ansible"><span class="nav-number">1.1.2.</span> <span class="nav-text">Linux 安装 Ansible</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-Pip-安装-Ansible"><span class="nav-number">1.1.3.</span> <span class="nav-text">使用 Pip 安装 Ansible</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ansible-文件"><span class="nav-number">1.2.</span> <span class="nav-text">Ansible 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ansible-操作之-Ad-Hoc-Command-和-Playbook"><span class="nav-number">1.3.</span> <span class="nav-text">Ansible 操作之 Ad-Hoc Command 和 Playbook</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Ad-Hoc-Commands"><span class="nav-number">1.3.1.</span> <span class="nav-text">Ad-Hoc Commands</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Playbook"><span class="nav-number">1.3.2.</span> <span class="nav-text">Playbook</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看-Ansible-的-Modules"><span class="nav-number">1.4.</span> <span class="nav-text">查看 Ansible 的 Modules</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Setup-模块"><span class="nav-number">1.5.</span> <span class="nav-text">Setup 模块</span></a></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">deepexi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+        </a>
+      </div>
+    
+  </nav>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">deepexi</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.4.0</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/muse.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
