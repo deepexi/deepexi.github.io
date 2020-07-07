@@ -225,6 +225,185 @@
   
   
   <div class="post-block home">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/07/脚手架集成consul/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="deepexi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="💧DeepEXI Team Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2020/07/07/脚手架集成consul/" class="post-title-link" itemprop="url">脚手架集成 consul</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              
+                
+              
+
+              <time title="Created: 2020-07-07 17:14:21" itemprop="dateCreated datePublished" datetime="2020-07-07T17:14:21+08:00">2020-07-07</time>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="脚手架集成-consul"><a href="#脚手架集成-consul" class="headerlink" title="脚手架集成 consul"></a>脚手架集成 consul</h1><blockquote>
+<p>consul 是一个用Go语言编写的可以自动化网络配置，服务发现并连接云容器的软件</p>
+</blockquote>
+<p> <em>为什么选择 consul ？</em><br> ✅服务发现 |  ✅储存数据元空间 | ✅集成Kubernetes | ✅健康检查 | ✅动态负载均衡 </p>
+<h4 id="安装generator-deepexi-spring-cloud相关依赖"><a href="#安装generator-deepexi-spring-cloud相关依赖" class="headerlink" title="安装generator-deepexi-spring-cloud相关依赖"></a>安装generator-deepexi-spring-cloud相关依赖</h4><ul>
+<li>安装yeoman<figure class="highlight plain"><figcaption><span>npm install -g yo ```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- 安装generator-deepexi-spring-cloud</span><br><span class="line"> ```$ npm install -g generator-deepexi-spring-cloud</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="下载consul到本地并启动consul"><a href="#下载consul到本地并启动consul" class="headerlink" title="下载consul到本地并启动consul:"></a>下载consul到本地并启动consul:</h4><figure class="highlight docker"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker pull consul:latest </span><br><span class="line">docker <span class="keyword">run</span><span class="bash"> -d -p 8500:8500/tcp consul agent -server -ui -bootstrap-expect=1 -client=0.0.0.0</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="下载脚手架代码"><a href="#下载脚手架代码" class="headerlink" title="下载脚手架代码"></a>下载脚手架代码</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mkdir &#123;your folder&#125;</span><br><span class="line">cd &#123;your folder&#125;</span><br><span class="line">git clone https://github.com/deepexi/generator-deepexi-spring-cloud.git</span><br><span class="line">git checkout develop</span><br></pre></td></tr></table></figure>
+
+<h4 id="调试模式启动脚手架"><a href="#调试模式启动脚手架" class="headerlink" title="调试模式启动脚手架"></a>调试模式启动脚手架</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm link</span><br></pre></td></tr></table></figure>
+
+<p>即可将本地项目代替 npm module 中对应的包</p>
+<h4 id="利用脚手架创建生产者项目"><a href="#利用脚手架创建生产者项目" class="headerlink" title="利用脚手架创建生产者项目"></a>利用脚手架创建生产者项目</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir consul-producer</span><br><span class="line">$ cd consul-producer</span><br><span class="line">$ yo deepexi-spring-cloud</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>根据交互任务调度类型选择 consul，生成 demo 选择 y.</p>
+</li>
+<li><p>修改applicaition.yml</p>
+<ul>
+<li>spring.application.name 是consul首页上显示的service name，为了便于识别修改为spring-cloud-consul-producer</li>
+<li>由于consul的健康检查实际上依赖的是actuator，所以还要配置actuator。脚手架默认引入了actuator的依赖及配置， 所以我们只需设置其服务端口即可   <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr"> spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line">	<span class="attr">name:</span> <span class="string">spring-cloud-consul-producer</span></span><br><span class="line"></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8086</span></span><br><span class="line"><span class="attr">management:</span></span><br><span class="line"><span class="attr">  server:</span></span><br><span class="line">	<span class="attr">port:</span> <span class="number">8083</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<ul>
+<li>修改applicaition-local.yml<ul>
+<li>注意的是，如果想要management-port生效，服务需和consul处于同一集群下<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">  spring:</span></span><br><span class="line"><span class="attr"> cloud:</span></span><br><span class="line"><span class="attr">consul:</span></span><br><span class="line"><span class="attr">  discovery:</span></span><br><span class="line">	<span class="attr">register-health-check:</span> <span class="literal">true</span></span><br><span class="line">	<span class="attr">register:</span> <span class="literal">true</span></span><br><span class="line">	<span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">	<span class="attr">management-port:</span> <span class="number">8083</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>register-health-check</td>
+<td>注册健康检查</td>
+</tr>
+<tr>
+<td>register</td>
+<td>注册为consul服务</td>
+</tr>
+<tr>
+<td>enabled</td>
+<td>是否启用服务发现</td>
+</tr>
+<tr>
+<td>management-port</td>
+<td>端口注册管理服务（即为actuator端口）</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>新增代码清单：<br>用于给生产者调用的接口 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@Payload</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProducerController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/hello"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"hello consul from producer"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="利用脚手架创建消费者项目"><a href="#利用脚手架创建消费者项目" class="headerlink" title="利用脚手架创建消费者项目"></a>利用脚手架创建消费者项目</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir consul-consumer</span><br><span class="line">$ cd consul-consumer</span><br><span class="line">$ yo deepexi-spring-cloud</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<ul>
+<li><p>根据交互任务调度类型选择 consul，生成 demo 选择 y.</p>
+</li>
+<li></li>
+<li><p>修改applicaition.yml</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">spring-cloud-consul-consumer</span></span><br><span class="line">	</span><br><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8080</span></span><br><span class="line"><span class="attr">management:</span></span><br><span class="line"><span class="attr">  server:</span></span><br><span class="line"><span class="attr">    port:</span> <span class="number">8081</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>修改applicaition-local.yml</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">      cloud:</span></span><br><span class="line"><span class="attr">        consul:</span></span><br><span class="line"><span class="attr">          discovery:</span></span><br><span class="line"><span class="attr">            register-health-check:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">            register:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">            enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">            management-port:</span> <span class="number">8081</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>新增代码清单：<br>  远程调用生产者接口的接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Payload</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConsumerController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> LoadBalancerClient loadBalancer;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@LoadBalanced</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RestTemplate <span class="title">restTemplate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RestTemplate();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RestTemplate restTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/call"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ServiceInstance serviceInstance = loadBalancer.choose(<span class="string">"spring-cloud-consul-producer"</span>);</span><br><span class="line">        System.out.println(<span class="string">"Hostname:"</span> + serviceInstance.getUri());</span><br><span class="line">        System.out.println(<span class="string">"service name:"</span> + serviceInstance.getServiceId());</span><br><span class="line"></span><br><span class="line">        String serviceResult1 = </span><br><span class="line">		<span class="keyword">new</span> RestTemplate().getForObject(serviceInstance.getUri().toString() + <span class="string">"/hello"</span>, String.class);</span><br><span class="line">        String serviceResult2 = </span><br><span class="line">		restTemplate.getForObject(<span class="string">"http://spring-cloud-consul-producer/hello"</span>, String.class);</span><br><span class="line">        <span class="keyword">return</span> serviceResult1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+<p>服务发现相关接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Payload</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServiceController</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> LoadBalancerClient loadBalancerClient;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> DiscoveryClient discoverClient;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/services"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">services</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> discoverClient.getInstances(<span class="string">"spring-cloud-consul-producer"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/discover"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">discover</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> loadBalancerClient.choose(<span class="string">"spring-cloud-consul-producer"</span>).getUri().toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="运行项目并测试"><a href="#运行项目并测试" class="headerlink" title="运行项目并测试"></a>运行项目并测试</h3><p>ok，当走到这一步已经差不多要大功告成了：）</p>
+<ul>
+<li><p>将两个项目启动，并打开 <a href="http://localhost:8500/ui" target="_blank" rel="noopener">http://localhost:8500/ui</a><br><img src="./image/1593761510458.png" alt="consul首页"><br>首页出现了绿色的打钩即说明健康检查正常</p>
+</li>
+<li><p>测试远程调用接口</p>
+   <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET <span class="string">"http://localhost:8080/call"</span> -H <span class="string">"accept: */*"</span></span><br></pre></td></tr></table></figure>
+
+<p>   返回以下信息即说明调用链路没有问题</p>
+   <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	  <span class="attr">"code"</span>: <span class="string">"1"</span>,</span><br><span class="line">	  <span class="attr">"payload"</span>: <span class="string">"&#123;\"code\":\"1\",\"payload\":\"hello consul from producer\",\"success\":true&#125;"</span>,</span><br><span class="line">	  <span class="attr">"success"</span>: <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+<ul>
+<li><p>测试服务发现接口</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET <span class="string">"http://localhost:8080/services"</span> -H <span class="string">"accept: */*"</span></span><br></pre></td></tr></table></figure>
+
+<p>返回以下信息则说明服务发现成功：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"code"</span>: <span class="string">"1"</span>,</span><br><span class="line">  <span class="attr">"payload"</span>: [</span><br><span class="line">	&#123;</span><br><span class="line">	  <span class="attr">"serviceId"</span>: <span class="string">"spring-cloud-consul-producer"</span>,</span><br><span class="line">	  <span class="attr">"host"</span>: <span class="string">"DESKTOP-J4VTE9I"</span>,</span><br><span class="line">	  <span class="attr">"port"</span>: <span class="number">8086</span>,</span><br><span class="line">	  <span class="attr">"secure"</span>: <span class="literal">false</span>,</span><br><span class="line">	  <span class="attr">"metadata"</span>: &#123;</span><br><span class="line">		<span class="attr">"secure"</span>: <span class="string">"false"</span></span><br><span class="line">	  &#125;,</span><br><span class="line">	  <span class="attr">"uri"</span>: <span class="string">"http://DESKTOP-J4VTE9I:8086"</span>,</span><br><span class="line">	  <span class="attr">"scheme"</span>: <span class="literal">null</span></span><br><span class="line">	&#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">"success"</span>: <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+        <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block home">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/21/Ansible/Ansible 快速上手/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -873,7 +1052,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -934,7 +1113,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
